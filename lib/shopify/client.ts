@@ -64,4 +64,14 @@ export async function shopifyFetch<T>(
   const json: ShopifyAPIResponse<T> = await res.json()
 
   if (json.errors?.length) {
-    throw ne
+    throw new Error(
+      `GraphQL: ${json.errors.map((e) => e.message).join(', ')}`
+    )
+  }
+
+  if (!json.data) {
+    throw new Error('No data returned from Shopify')
+  }
+
+  return json.data
+}

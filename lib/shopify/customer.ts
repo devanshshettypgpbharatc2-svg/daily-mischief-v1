@@ -3,6 +3,7 @@ import {
   CUSTOMER_CREATE,
   CUSTOMER_ACCESS_TOKEN_CREATE,
   CUSTOMER_ACCESS_TOKEN_DELETE,
+  CUSTOMER_UPDATE,
 } from '../graphql/mutations'
 import { GET_CUSTOMER } from '../graphql/queries/customer'
 
@@ -60,63 +61,66 @@ export async function createCustomer(
   firstName?: string,
   lastName?: string
 ): Promise<{ customer?: { id: string; email: string }; errors?: string[] }> {
-  try {
-    const data = await shopifyFetch<{
-      customerCreate: {
-        customer: { id: string; email: string } | null
-        customerUserErrors: Array<{ code: string; field: string[]; message: string }>
-      }
-    }>(CUSTOMER_CREATE, { input: { email, password, firstName, lastName } }, { cache: 'no-store' })
+  const res = await shopifyFetch<{
+    customerCreate: {
+      customer: { id: string; email: string } | null
+      customerUserErrors: Array<{ code: string; field: string[]; message: string }>
+    }
+  }>({
+    query: CUSTOMER_CREATE,
+    variables: { input: { email, password, firstName, lastName } },
+    cache: 'no-store',
+  })
 
-    if (data.customerCreate?.customerUserErrors?.length) {
-      return { errors: data.customerCreate.customerUserErrors.map((e) => e.message) }
-    }
-    if (!data.customerCreate?.customer) {
-      return { errors: ['Failed to create account. Please try again.'] }
-    }
-    return { customer: data.customerCreate.customer }
-  } catch (err) {
-    return { errors: [(err as Error).message || 'Something went wrong.'] }
+  if (res.body.data?.customerCreate?.customerUserErrors?.length) {
+    return { errors: res.body.data.customerCreate.customerUserErrors.map((e) => e.message) }
   }
+  if (!res.body.data?.customerCreate?.customer) {
+    return { errors: ['Failed to create account. Please try again.'] }
+  }
+  return { customer: res.body.data.customerCreate.customer }
 }
 
 export async function createCustomerAccessToken(
   email: string,
   password: string
 ): Promise<{ token?: CustomerAccessToken; errors?: string[] }> {
-  try {
-    const data = await shopifyFetch<{
-      customerAccessTokenCreate: {
-        customerAccessToken: CustomerAccessToken | null
-        customerUserErrors: Array<{ code: string; field: string[]; message: string }>
-      }
-    }>(CUSTOMER_ACCESS_TOKEN_CREATE, { input: { email, password } }, { cache: 'no-store' })
+  const res = await shopifyFetch<{
+    customerAccessTokenCreate: {
+      customerAccessToken: CustomerAccessToken | null
+      customerUserErrors: Array<{ code: string; field: string[]; message: string }>
+    }
+  }>({
+    query: CUSTOMER_ACCESS_TOKEN_CREATE,
+    variables: { input: { email, password } },
+    cache: 'no-store',
+  })
 
-    if (data.customerAccessTokenCreate?.customerUserErrors?.length) {
-      return { errors: data.customerAccessTokenCreate.customerUserErrors.map((e) => e.message) }
-    }
-    const token = data.customerAccessTokenCreate?.customerAccessToken
-    if (!token) {
-      return { errors: ['Invalid email or password.'] }
-    }
-    return { token }
-  } catch {
+  if (res.body.data?.customerAccessTokenCreate?.customerUserErrors?.length) {
+    return { errors: res.body.data.customerAccessTokenCreate.customerUserErrors.map((e) => e.message) }
+  }
+  const token = res.body.data?.customerAccessTokenCreate?.customerAccessToken
+  if (!token) {
     return { errors: ['Invalid email or password.'] }
   }
+  return { token }
 }
 
-export async function deleteCustomerAccessToken(accessToken: string): Promise<void> {
-  try {
-    await shopifyFetch(
-      CUSTOMER_ACCESS_TOKEN_DELETE,
-      { customerAccessToken: accessToken },
-      { cache: 'no-store' }
-    )
-  } catch {
-    // Ignore — token may already be expired
-  }
+export async function deleteCustomerAccessToken(
+  accessToken: string
+): Promise<void> {
+  await shopifyFetch({
+    query: CUSTOMER_ACCESS_TOKEN_DELETE,
+    variables: { customerAccessToken: accessToken },
+    cache: 'no-store',
+  })
 }
 
 export async function getCustomer(accessToken: string): Promise<Customer | null> {
-  try {
-    const data = await shopifyFetch<{ customer: Customer | n
+  const res = await shopifyFetch<{ customer: Customer | null }>({
+    query: GET_CUSTOMER,
+    variables: { customerAccessToken: accessToken },
+    cache: 'no-store',
+  })
+  return res.body.data?.customer ?? null
+}
