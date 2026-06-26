@@ -15,7 +15,11 @@ export async function GET() {
         'X-Shopify-Storefront-Access-Token': token ?? '',
       },
       body: JSON.stringify({
-        query: `{ collection(handle: "wardrobe") { title products(first: 3) { edges { node { title } } } } }`,
+        query: `{
+          shop { name }
+          collections(first: 5) { edges { node { handle title } } }
+          collection(handle: "wardrobe") { title products(first: 3) { edges { node { title } } } }
+        }`,
       }),
       cache: 'no-store',
     })
