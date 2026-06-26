@@ -13,7 +13,6 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, priority = false, index = 0 }: ProductCardProps) {
-  const prefersReduced = useReducedMotion()
   const firstImage = product.images[0]
   const secondImage = product.images[1]
   const firstVariant = product.variants[0]
