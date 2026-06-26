@@ -27,4 +27,12 @@ export async function POST(req: NextRequest) {
   }
 
   if (topic.startsWith('collections/')) {
-    revalidateTag(CACHE_TAG
+    revalidateTag(CACHE_TAGS.collections)
+    try {
+      const body = await req.json()
+      if (body.handle) revalidateTag(CACHE_TAGS.collection(body.handle))
+    } catch {}
+  }
+
+  return NextResponse.json({ ok: true })
+}

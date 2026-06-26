@@ -160,4 +160,25 @@ export function Nav() {
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="py-4 font-serif text-[22px] font-light text-white/70 hover:text-white transition-colors border-b bo
+              className="py-4 font-serif text-[22px] font-light text-white/70 hover:text-white transition-colors border-b border-white/[0.06]"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+        <div className="px-6 py-6 flex items-center justify-between">
+          <p className="font-sans text-[9px] tracking-[0.4em] uppercase text-white/25">
+            One piece. Every day.
+          </p>
+          <Link
+            href="/account"
+            onClick={() => setMenuOpen(false)}
+            className="font-sans text-[9px] tracking-[0.3em] uppercase text-white/35 hover:text-white transition-colors"
+          >
+            Account
+          </Link>
+        </div>
+      </div>
+    </>
+  )
+}
