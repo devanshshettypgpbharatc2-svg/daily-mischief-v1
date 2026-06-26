@@ -216,10 +216,10 @@ export default async function ProductPage({ params }: { params: { handle: string
                 <AccordionItem label="Delivery & Returns">
                   <div className="space-y-2">
                     <p className="font-sans text-[11px] leading-[1.85] text-white/40">
-                      3–5 business days. Worth the wait.
+                      3–5 business days. Pan India delivery.
                     </p>
                     <p className="font-sans text-[11px] leading-[1.85] text-white/40">
-                      Free delivery on orders over £200.
+                      Free delivery on orders above ₹2,000.
                     </p>
                     <p className="font-sans text-[11px] leading-[1.85] text-white/40">
                       Changed your mind? 14 days. No questions asked.

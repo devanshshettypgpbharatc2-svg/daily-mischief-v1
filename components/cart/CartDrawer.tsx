@@ -10,7 +10,7 @@ import { cn, formatMoney, getShopifyImageUrl, getProductUrl } from '@/utils'
 import type { CartItem } from '@/types'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
-const FREE_SHIPPING_THRESHOLD = 200 // £
+const FREE_SHIPPING_THRESHOLD = 2000 // ₹
 
 // ─── Free shipping bar ────────────────────────────────────────────────────────
 
@@ -24,8 +24,8 @@ function FreeShippingBar({ subtotal }: { subtotal: number }) {
       <div className="flex items-center justify-between mb-2.5">
         <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/35">
           {qualified
-            ? 'Free UK delivery unlocked'
-            : `£${remaining.toFixed(0)} away from free delivery`}
+            ? 'Free Pan India delivery unlocked'
+            : `₹${remaining.toFixed(0)} away from free delivery`}
         </p>
         {qualified && (
           <span className="font-sans text-[8px] tracking-[0.2em] uppercase text-[#B5121B]">
