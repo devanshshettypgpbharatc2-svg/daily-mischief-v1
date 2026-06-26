@@ -72,7 +72,6 @@ export async function createCustomer(
       { input: { email, password, firstName, lastName } },
       { cache: 'no-store' }
     )
-
     if (data.customerCreate?.customerUserErrors?.length) {
       return { errors: data.customerCreate.customerUserErrors.map((e) => e.message) }
     }
@@ -100,7 +99,6 @@ export async function createCustomerAccessToken(
       { input: { email, password } },
       { cache: 'no-store' }
     )
-
     if (data.customerAccessTokenCreate?.customerUserErrors?.length) {
       return { errors: data.customerAccessTokenCreate.customerUserErrors.map((e) => e.message) }
     }
@@ -121,9 +119,7 @@ export async function deleteCustomerAccessToken(accessToken: string): Promise<vo
       { customerAccessToken: accessToken },
       { cache: 'no-store' }
     )
-  } catch {
-    // ignore — token already expired or invalid
-  }
+  } catch { }
 }
 
 export async function getCustomer(accessToken: string): Promise<Customer | null> {
