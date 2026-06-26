@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next'
+﻿import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Inter } from 'next/font/google'
 import { CartProvider } from '@/hooks/useCart'
 import { SmoothScroll } from '@/components/SmoothScroll'
