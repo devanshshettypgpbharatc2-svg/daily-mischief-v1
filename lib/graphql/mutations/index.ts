@@ -1,4 +1,4 @@
-import { CART_FRAGMENT } from '../fragments'
+import { CART_FRAGMENT, MONEY_FRAGMENT, IMAGE_FRAGMENT } from '../fragments'
 
 export const CREATE_CART = `
   mutation CreateCart($lines: [CartLineInput!]) {
@@ -8,6 +8,8 @@ export const CREATE_CART = `
     }
   }
   ${CART_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${IMAGE_FRAGMENT}
 `
 
 export const GET_CART = `
@@ -15,6 +17,8 @@ export const GET_CART = `
     cart(id: $cartId) { ...CartFragment }
   }
   ${CART_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${IMAGE_FRAGMENT}
 `
 
 export const ADD_TO_CART = `
@@ -25,6 +29,8 @@ export const ADD_TO_CART = `
     }
   }
   ${CART_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${IMAGE_FRAGMENT}
 `
 
 export const UPDATE_CART_LINES = `
@@ -35,6 +41,8 @@ export const UPDATE_CART_LINES = `
     }
   }
   ${CART_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${IMAGE_FRAGMENT}
 `
 
 export const REMOVE_FROM_CART = `
@@ -45,4 +53,6 @@ export const REMOVE_FROM_CART = `
     }
   }
   ${CART_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${IMAGE_FRAGMENT}
 `

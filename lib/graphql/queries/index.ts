@@ -7,6 +7,9 @@ export const GET_PRODUCT_BY_HANDLE = `
     }
   }
   ${PRODUCT_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${IMAGE_FRAGMENT}
+  ${PRODUCT_VARIANT_FRAGMENT}
 `
 
 export const GET_ALL_PRODUCT_HANDLES = `
@@ -24,6 +27,9 @@ export const GET_PRODUCT_RECOMMENDATIONS = `
     }
   }
   ${PRODUCT_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${IMAGE_FRAGMENT}
+  ${PRODUCT_VARIANT_FRAGMENT}
 `
 
 export const GET_COLLECTION_BY_HANDLE = `
@@ -92,6 +98,7 @@ export const GET_ALL_COLLECTIONS = `
     }
   }
   ${COLLECTION_FRAGMENT}
+  ${IMAGE_FRAGMENT}
 `
 
 export const SEARCH_PRODUCTS = `

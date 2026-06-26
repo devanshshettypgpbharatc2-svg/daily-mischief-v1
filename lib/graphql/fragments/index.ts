@@ -27,8 +27,6 @@ export const PRODUCT_VARIANT_FRAGMENT = `
     compareAtPrice { ...MoneyFragment }
     image { ...ImageFragment }
   }
-  ${MONEY_FRAGMENT}
-  ${IMAGE_FRAGMENT}
 `
 
 export const PRODUCT_FRAGMENT = `
@@ -53,9 +51,6 @@ export const PRODUCT_FRAGMENT = `
     options { id name values }
     seo { title description }
   }
-  ${MONEY_FRAGMENT}
-  ${IMAGE_FRAGMENT}
-  ${PRODUCT_VARIANT_FRAGMENT}
 `
 
 export const COLLECTION_FRAGMENT = `
@@ -68,7 +63,6 @@ export const COLLECTION_FRAGMENT = `
     image { ...ImageFragment }
     seo { title description }
   }
-  ${IMAGE_FRAGMENT}
 `
 
 export const CART_FRAGMENT = `
@@ -108,6 +102,4 @@ export const CART_FRAGMENT = `
       }
     }
   }
-  ${MONEY_FRAGMENT}
-  ${IMAGE_FRAGMENT}
 `
