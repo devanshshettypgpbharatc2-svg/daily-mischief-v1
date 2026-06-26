@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { label: 'Wardrobe', href: '/shop/collections/wardrobe' },
   { label: 'Home', href: '/shop/collections/home' },
   { label: 'Oddities', href: '/shop/collections/oddities' },
+  { label: 'Regret Tax', href: '/regret-tax' },
   { label: 'Editorial', href: '/editorial' },
   { label: 'About', href: '/about' },
 ]

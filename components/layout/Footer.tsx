@@ -41,8 +41,8 @@ export function Footer() {
             {[
               ['About', '/about'],
               ['Editorial', '/editorial'],
+              ['The Regret Tax', '/regret-tax'],
               ['Hall of Mischief', '/hall-of-mischief'],
-              ['The Graveyard', '/graveyard'],
             ].map(([label, href]) => (
               <li key={href}>
                 <Link href={href} className="font-sans text-[11px] text-white/40 hover:text-white transition-colors tracking-[0.04em]">
