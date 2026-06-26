@@ -60,20 +60,14 @@ export function ProductGallery({ product }: { product: Product }) {
                 sizes="76px"
                 className="object-cover"
               />
-              {/* Active ring */}
-              <motion.div
-                className="absolute inset-0 ring-1 ring-inset pointer-events-none"
-                animate={{ ringColor: i === activeIndex ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0)' }}
+              {/* Active ring + dim overlay */}
+              <div
+                className="absolute inset-0 pointer-events-none transition-all duration-300"
                 style={{
                   outline: i === activeIndex ? '1px solid rgba(255,255,255,0.45)' : '1px solid transparent',
                   outlineOffset: '-1px',
+                  backgroundColor: i === activeIndex ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,0.52)',
                 }}
-              />
-              {/* Dimming overlay */}
-              <motion.div
-                className="absolute inset-0 bg-black pointer-events-none"
-                animate={{ opacity: i === activeIndex ? 0 : 0.55 }}
-                transition={{ duration: 0.25 }}
               />
             </button>
           ))}
