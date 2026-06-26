@@ -47,7 +47,7 @@ export default async function CollectionPage({ params }: { params: { handle: str
           <header className="relative h-[55vh] md:h-[65vh] overflow-hidden flex items-end">
             <Image
               src={getShopifyImageUrl(collection.image!.url, 1600)}
-              alt={collection.image!.altText || collection.title}
+              alt={collection.image!.alt || collection.title}
               fill
               priority
               sizes="100vw"
