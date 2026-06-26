@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN
-  const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
+  const privateToken = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN
+  const publicToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
   const version = process.env.SHOPIFY_API_VERSION || '2024-10'
 
   const endpoint = `https://${domain}/api/${version}/graphql.json`
@@ -12,7 +13,9 @@ export async function GET() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Shopify-Storefront-Access-Token': token ?? '',
+        ...(privateToken
+          ? { 'Shopify-Storefront-Private-Token': privateToken }
+          : { 'X-Shopify-Storefront-Access-Token': publicToken ?? '' }),
       },
       body: JSON.stringify({
         query: `{
@@ -29,11 +32,12 @@ export async function GET() {
     return NextResponse.json({
       status: res.status,
       domain,
-      tokenPrefix: token?.slice(0, 8) + '...',
+      usingPrivateToken: !!privateToken,
+      tokenPrefix: (privateToken ?? publicToken)?.slice(0, 8) + '...',
       endpoint,
       response: json,
     })
   } catch (err: unknown) {
-    return NextResponse.json({ error: String(err), domain, tokenPrefix: token?.slice(0, 8) + '...' })
+    return NextResponse.json({ error: String(err), domain, usingPrivateToken: !!privateToken })
   }
 }

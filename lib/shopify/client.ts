@@ -1,13 +1,14 @@
 import type { ShopifyAPIResponse } from '@/types'
 
 const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN!
-const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!
+const privateToken = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN
+const publicToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!
 const version = process.env.SHOPIFY_API_VERSION || '2024-10'
 
-if (!domain || !token) {
+if (!domain || (!privateToken && !publicToken)) {
   if (typeof window === 'undefined' && process.env.NODE_ENV !== 'test') {
     console.warn(
-      '[Shopify] Missing env vars: NEXT_PUBLIC_SHOPIFY_DOMAIN or SHOPIFY_STOREFRONT_ACCESS_TOKEN'
+      '[Shopify] Missing env vars: NEXT_PUBLIC_SHOPIFY_DOMAIN or storefront token'
     )
   }
 }
@@ -44,7 +45,9 @@ export async function shopifyFetch<T>(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': token,
+      ...(privateToken
+        ? { 'Shopify-Storefront-Private-Token': privateToken }
+        : { 'X-Shopify-Storefront-Access-Token': publicToken }),
     },
     body: JSON.stringify({
       query,
