@@ -52,7 +52,7 @@ export function CollectionCards() {
                 <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-white/18">
                   {col.index}
                 </span>
-                <span className="font-sans text-[10px] text-[#B5121B] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -translate-x-1 group-hover:translate-x-0 transition-transform">
+                <span className="font-sans text-[10px] text-[#B5121B] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300">
                   →
                 </span>
               </div>

@@ -27,8 +27,8 @@ export function PhilosophySection() {
         </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20">
-          {/* Left intentionally empty for editorial whitespace */}
-          <div />
+          {/* Left intentionally empty for editorial whitespace — hidden on mobile */}
+          <div className="hidden md:block" />
 
           <ScrollReveal delay={0.14}>
             <div className="w-10 h-px bg-[#B5121B] mb-8" />

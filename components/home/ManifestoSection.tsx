@@ -35,7 +35,7 @@ export function ManifestoSection() {
             <motion.p
               key={line}
               className="font-serif font-light text-white uppercase leading-[0.88] tracking-[0.05em]"
-              style={{ fontSize: 'clamp(44px, 9vw, 128px)' }}
+              style={{ fontSize: 'clamp(32px, 9vw, 128px)' }}
               initial={prefersReduced ? false : { opacity: 0, y: 40 }}
               animate={
                 isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }

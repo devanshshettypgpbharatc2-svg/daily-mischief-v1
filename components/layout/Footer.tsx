@@ -54,7 +54,7 @@ export function Footer() {
         </div>
 
         {/* Help */}
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <p className="font-sans text-[9px] tracking-[0.4em] uppercase text-[#B5121B] mb-5">Help</p>
           <ul className="space-y-3">
             {[
