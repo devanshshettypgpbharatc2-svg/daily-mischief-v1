@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
 import { CACHE_TAGS } from '@/lib/shopify'
 
+export async function GET() {
+  revalidateTag(CACHE_TAGS.products)
+  revalidateTag(CACHE_TAGS.collections)
+  return NextResponse.json({ revalidated: true, timestamp: new Date().toISOString() })
+}
+
 export async function POST(req: NextRequest) {
   const secret = req.headers.get('x-shopify-webhook-secret')
   const webhookSecret = process.env.SHOPIFY_WEBHOOK_SECRET
