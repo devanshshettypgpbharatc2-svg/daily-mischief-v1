@@ -18,13 +18,9 @@ function sortProducts(products: Product[], sort: SortKey): Product[] {
   const arr = [...products]
   switch (sort) {
     case 'price-asc':
-      return arr.sort((a, b) =>
-        parseFloat(a.priceRange.min.amount) - parseFloat(b.priceRange.min.amount)
-      )
+      return arr.sort((a, b) => a.priceRange.min.amount - b.priceRange.min.amount)
     case 'price-desc':
-      return arr.sort((a, b) =>
-        parseFloat(b.priceRange.min.amount) - parseFloat(a.priceRange.min.amount)
-      )
+      return arr.sort((a, b) => b.priceRange.min.amount - a.priceRange.min.amount)
     case 'name-asc':
       return arr.sort((a, b) => a.title.localeCompare(b.title))
     default:
