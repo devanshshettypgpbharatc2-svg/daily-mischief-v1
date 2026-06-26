@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { useCart } from '@/hooks/useCart'
 import { useCountdown } from '@/hooks/useCountdown'
 import { cn } from '@/utils'
@@ -14,44 +15,117 @@ const NAV_LINKS = [
   { label: 'About', href: '/about' },
 ]
 
+const EASE = [0.16, 1, 0.3, 1] as const
+
+const mobileMenuVariants = {
+  closed: {
+    x: '100%',
+    transition: { duration: 0.4, ease: [0.32, 0, 0.67, 0] as const },
+  },
+  open: {
+    x: 0,
+    transition: { duration: 0.5, ease: EASE },
+  },
+}
+
+const mobileLinkVariants = {
+  closed: { opacity: 0, x: 24 },
+  open: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.45, ease: EASE, delay: 0.08 + i * 0.065 },
+  }),
+}
+
+// Desktop nav link with animated underline
+function NavLink({
+  href,
+  children,
+  dimmed = false,
+}: {
+  href: string
+  children: React.ReactNode
+  dimmed?: boolean
+}) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <Link
+      href={href}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={cn(
+        'relative font-sans text-[10px] tracking-[0.2em] uppercase transition-colors duration-300',
+        dimmed ? 'text-white/55 hover:text-white' : 'text-white hover:text-white/80'
+      )}
+    >
+      {children}
+      <motion.span
+        className="absolute left-0 h-px bg-white/50 pointer-events-none"
+        style={{ bottom: '-3px', width: '100%', originX: 0 }}
+        initial={false}
+        animate={{ scaleX: hovered ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: EASE }}
+      />
+    </Link>
+  )
+}
+
 export function Nav() {
   const { cart, openCart } = useCart()
   const { display, isUrgent } = useCountdown()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastScrollY = useRef(0)
+  const prefersReduced = useReducedMotion()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 60)
+      if (y > 120) {
+        setHidden(y > lastScrollY.current)
+      } else {
+        setHidden(false)
+      }
+      lastScrollY.current = y
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
   const qty = cart?.totalQuantity ?? 0
 
+  const allMobileLinks = [
+    { label: "Today's Mischief", href: '/shop/collections/todays-mischief', isTodays: true },
+    ...NAV_LINKS,
+  ]
+
   return (
     <>
-      <nav
+      <motion.nav
         className={cn(
           'fixed top-0 left-0 right-0 z-[800]',
           'transition-colors duration-500',
-          scrolled ? 'bg-[#111111]/95 backdrop-blur-sm border-b border-white/[0.06]' : 'bg-transparent'
+          scrolled
+            ? 'bg-[#111111]/95 backdrop-blur-sm border-b border-white/[0.06]'
+            : 'bg-transparent'
         )}
+        animate={prefersReduced ? {} : { y: hidden && !menuOpen ? '-100%' : '0%' }}
+        transition={{ duration: 0.35, ease: EASE }}
         aria-label="Main navigation"
       >
         <div className="flex items-center justify-between px-5 md:px-10 h-16 md:h-[72px]">
           {/* Logo */}
           <Link
             href="/"
-            className="font-serif text-[13px] md:text-[15px] font-light tracking-[0.22em] uppercase text-white hover:text-white/70 transition-colors"
+            className="font-serif text-[13px] md:text-[15px] font-light tracking-[0.22em] uppercase text-white hover:text-white/70 transition-colors duration-300"
             onClick={() => setMenuOpen(false)}
           >
             The Daily Mischief
@@ -59,126 +133,155 @@ export function Nav() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
-            {/* Today's Mischief with countdown */}
-            <Link
-              href="/shop/collections/todays-mischief"
-              className="flex items-center gap-3 font-sans text-[10px] tracking-[0.2em] uppercase text-white hover:text-white/70 transition-colors"
-            >
-              Today's Mischief
-              <span className={cn(
-                'font-sans text-[10px] tracking-[0.15em] tabular-nums transition-colors duration-300',
-                isUrgent ? 'text-white/70' : 'text-white/40'
-              )}>
-                {display}
+            {/* Today's Mischief + countdown */}
+            <NavLink href="/shop/collections/todays-mischief">
+              <span className="inline-flex items-center gap-3">
+                Today&apos;s Mischief
+                <span
+                  className={cn(
+                    'font-sans text-[10px] tracking-[0.15em] tabular-nums transition-colors duration-300',
+                    isUrgent ? 'text-white/70' : 'text-white/40'
+                  )}
+                >
+                  {display}
+                </span>
               </span>
-            </Link>
+            </NavLink>
 
             {NAV_LINKS.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="font-sans text-[10px] tracking-[0.2em] uppercase text-white/55 hover:text-white transition-colors duration-300"
-              >
+              <NavLink key={link.href} href={link.href} dimmed>
                 {link.label}
-              </Link>
+              </NavLink>
             ))}
           </div>
 
-          {/* Right: Account + Cart + mobile menu */}
+          {/* Right: Account + Cart + hamburger */}
           <div className="flex items-center gap-4">
-            {/* Account link */}
             <Link
               href="/account"
-              className="hidden md:flex font-sans text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white transition-colors"
+              className="hidden md:flex font-sans text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white transition-colors duration-300"
               aria-label="My account"
             >
               Account
             </Link>
-            {/* Cart button */}
+
+            {/* Cart */}
             <button
               onClick={openCart}
-              className="flex items-center gap-2 font-sans text-[10px] tracking-[0.2em] uppercase text-white hover:text-white/70 transition-colors focus-visible:outline-2 focus-visible:outline-[#B5121B] focus-visible:outline-offset-2 p-2 -m-2"
+              className="flex items-center gap-2 font-sans text-[10px] tracking-[0.2em] uppercase text-white hover:text-white/70 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-[#B5121B] focus-visible:outline-offset-2 p-2 -m-2"
               aria-label={`Open bag, ${qty} ${qty === 1 ? 'item' : 'items'}`}
             >
               <span className="hidden sm:inline">Bag</span>
-              {qty > 0 && (
-                <span className="flex items-center justify-center w-4 h-4 bg-[#B5121B] rounded-full text-[9px] text-white leading-none">
-                  {qty}
-                </span>
-              )}
+              <AnimatePresence mode="popLayout">
+                {qty > 0 && (
+                  <motion.span
+                    key={qty}
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.22, ease: EASE }}
+                    className="flex items-center justify-center w-4 h-4 bg-[#B5121B] rounded-full text-[9px] text-white leading-none"
+                  >
+                    {qty}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
 
             {/* Mobile hamburger */}
             <button
-              className="md:hidden flex flex-col justify-center gap-[5px] p-3 -m-3 focus-visible:outline-2 focus-visible:outline-[#B5121B] focus-visible:outline-offset-2"
+              className="md:hidden flex flex-col justify-center items-center gap-[5px] w-10 h-10 focus-visible:outline-2 focus-visible:outline-[#B5121B] focus-visible:outline-offset-2"
               onClick={() => setMenuOpen(v => !v)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
             >
-              <span className={cn(
-                'block w-5 h-px bg-white transition-all duration-300',
-                menuOpen && 'translate-y-[6px] rotate-45'
-              )} />
-              <span className={cn(
-                'block w-5 h-px bg-white transition-all duration-300',
-                menuOpen && 'opacity-0'
-              )} />
-              <span className={cn(
-                'block w-5 h-px bg-white transition-all duration-300',
-                menuOpen && '-translate-y-[6px] -rotate-45'
-              )} />
+              <motion.span
+                className="block w-5 h-px bg-white"
+                animate={menuOpen ? { y: 6, rotate: 45 } : { y: 0, rotate: 0 }}
+                transition={{ duration: 0.3, ease: EASE }}
+                style={{ originX: '50%', originY: '50%' }}
+              />
+              <motion.span
+                className="block w-5 h-px bg-white"
+                animate={menuOpen ? { opacity: 0, scaleX: 0.3 } : { opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.span
+                className="block w-5 h-px bg-white"
+                animate={menuOpen ? { y: -6, rotate: -45 } : { y: 0, rotate: 0 }}
+                transition={{ duration: 0.3, ease: EASE }}
+                style={{ originX: '50%', originY: '50%' }}
+              />
             </button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile menu */}
-      <div
-        className={cn(
-          'fixed inset-0 z-[700] bg-[#111111] flex flex-col pt-16 md:hidden',
-          'transition-transform duration-500',
-          menuOpen ? 'translate-x-0' : 'translate-x-full'
-        )}
-        aria-hidden={!menuOpen}
-      >
-        <div className="flex flex-col px-6 py-8 gap-1 border-b border-white/[0.06]">
-          <Link
-            href="/shop/collections/todays-mischief"
-            onClick={() => setMenuOpen(false)}
-            className="py-4 flex items-center justify-between font-serif text-[22px] font-light text-white border-b border-white/[0.06]"
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-menu"
+            className="fixed inset-0 z-[700] bg-[#111111] flex flex-col pt-16 md:hidden"
+            variants={mobileMenuVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            aria-label="Mobile navigation"
           >
-            Today's Mischief
-            <span className={cn(
-              'font-sans text-[12px] tracking-[0.15em] tabular-nums',
-              isUrgent ? 'text-white/70' : 'text-white/35'
-            )}>
-              {display}
-            </span>
-          </Link>
-          {NAV_LINKS.map(link => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className="py-4 font-serif text-[22px] font-light text-white/70 hover:text-white transition-colors border-b border-white/[0.06]"
+            <div className="flex flex-col px-6 py-8 border-b border-white/[0.06]">
+              {allMobileLinks.map((link, i) => (
+                <motion.div
+                  key={link.href}
+                  custom={i}
+                  variants={prefersReduced ? undefined : mobileLinkVariants}
+                  initial="closed"
+                  animate="open"
+                >
+                  <Link
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={cn(
+                      'py-4 flex items-center justify-between font-serif text-[22px] font-light border-b border-white/[0.06] transition-colors duration-300',
+                      link.isTodays ? 'text-white' : 'text-white/70 hover:text-white'
+                    )}
+                  >
+                    {link.label}
+                    {link.isTodays && (
+                      <span
+                        className={cn(
+                          'font-sans text-[12px] tracking-[0.15em] tabular-nums',
+                          isUrgent ? 'text-white/70' : 'text-white/35'
+                        )}
+                      >
+                        {display}
+                      </span>
+                    )}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              className="px-6 py-6 flex items-center justify-between"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
             >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-        <div className="px-6 py-6 flex items-center justify-between">
-          <p className="font-sans text-[9px] tracking-[0.4em] uppercase text-white/25">
-            One piece. Every day.
-          </p>
-          <Link
-            href="/account"
-            onClick={() => setMenuOpen(false)}
-            className="font-sans text-[9px] tracking-[0.3em] uppercase text-white/35 hover:text-white transition-colors"
-          >
-            Account
-          </Link>
-        </div>
-      </div>
+              <p className="font-sans text-[9px] tracking-[0.4em] uppercase text-white/25">
+                One piece. Every day.
+              </p>
+              <Link
+                href="/account"
+                onClick={() => setMenuOpen(false)}
+                className="font-sans text-[9px] tracking-[0.3em] uppercase text-white/35 hover:text-white transition-colors duration-300"
+              >
+                Account
+              </Link>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
