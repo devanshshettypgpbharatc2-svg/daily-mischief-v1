@@ -9,7 +9,7 @@ export function transformMoney(m: ShopifyMoneyV2): Money {
   return {
     amount,
     currencyCode: m.currencyCode,
-    formatted: new Intl.NumberFormat('en-GB', {
+    formatted: new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: m.currencyCode,
       minimumFractionDigits: 0,
@@ -34,7 +34,7 @@ export function transformVariant(v: ShopifyProductVariant): ProductVariant {
     title: v.title,
     available: v.availableForSale,
     quantityAvailable: v.quantityAvailable ?? 0,
-    options: v.selectedOptions.reduce<Record<string, string>>(
+    options: (v.selectedOptions ?? []).reduce<Record<string, string>>(
       (acc, o) => ({ ...acc, [o.name]: o.value }),
       {}
     ),
@@ -56,8 +56,8 @@ export function transformProduct(p: ShopifyProduct): Product {
     tags: p.tags,
     type: p.productType,
     vendor: p.vendor,
-    images: p.images.edges.map(e => transformImage(e.node)),
-    variants: p.variants.edges.map(e => transformVariant(e.node)),
+    images: (p.images?.edges ?? []).map(e => transformImage(e.node)),
+    variants: (p.variants?.edges ?? []).map(e => transformVariant(e.node)),
     options: p.options,
     priceRange: {
       min: transformMoney(p.priceRange.minVariantPrice),
@@ -120,6 +120,4 @@ export function transformCart(c: ShopifyCart): Cart {
     items: c.lines.edges.map(e => transformCartLine(e.node)),
     subtotal: transformMoney(c.cost.subtotalAmount),
     total: transformMoney(c.cost.totalAmount),
-    tax: c.cost.totalTaxAmount ? transformMoney(c.cost.totalTaxAmount) : null,
-  }
-}
+    tax: c.cost.totalTaxAmount ? transformMoney(c.cost.tota

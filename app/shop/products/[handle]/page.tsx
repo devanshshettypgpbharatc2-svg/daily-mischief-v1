@@ -9,6 +9,7 @@ import { AddToCartForm } from '@/components/product/AddToCartForm'
 import { ProductCard } from '@/components/product/ProductCard'
 import { ProductGallery } from '@/components/product/ProductGallery'
 import { AccordionItem } from '@/components/ui/Accordion'
+import { SizeChart, isClothingProduct } from '@/components/product/SizeChart'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { getProductByHandle, getAllProductHandles, getProductRecommendations } from '@/lib/shopify'
 import { formatMoney } from '@/utils'
@@ -197,6 +198,9 @@ export default async function ProductPage({ params }: { params: { handle: string
                   </AccordionItem>
                 )}
 
+                {/* Size Chart — clothing only */}
+                {isClothingProduct(product.type) && <SizeChart />}
+
                 {/* Care & Composition */}
                 <AccordionItem label="Care & Composition">
                   <div className="space-y-2">
@@ -231,12 +235,4 @@ export default async function ProductPage({ params }: { params: { handle: string
           </div>
         </div>
 
-        {/* Recommendations */}
-        <Suspense fallback={<div className="h-32" />}>
-          <Recommendations productId={product.id} />
-        </Suspense>
-      </main>
-      <Footer />
-    </>
-  )
-}
+      
