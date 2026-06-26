@@ -6,7 +6,7 @@ import { CartDrawer } from '@/components/cart/CartDrawer'
 
 export const metadata: Metadata = {
   title: 'About — The Daily Mischief',
-  description: 'We don't make clothes. We make the reason someone stops you on the street.',
+  description: "We don't make clothes. We make the reason someone stops you on the street.",
 }
 
 export default function AboutPage() {
