@@ -8,6 +8,10 @@ const nextConfig = {
         hostname: 'cdn.shopify.com',
         pathname: '/s/files/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
     minimumCacheTTL: 31536000,
   },

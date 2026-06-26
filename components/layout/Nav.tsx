@@ -84,8 +84,16 @@ export function Nav() {
             ))}
           </div>
 
-          {/* Right: Cart + mobile menu */}
+          {/* Right: Account + Cart + mobile menu */}
           <div className="flex items-center gap-4">
+            {/* Account link */}
+            <Link
+              href="/account"
+              className="hidden md:flex font-sans text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white transition-colors"
+              aria-label="My account"
+            >
+              Account
+            </Link>
             {/* Cart button */}
             <button
               onClick={openCart}
@@ -158,10 +166,17 @@ export function Nav() {
             </Link>
           ))}
         </div>
-        <div className="px-6 py-6">
+        <div className="px-6 py-6 flex items-center justify-between">
           <p className="font-sans text-[9px] tracking-[0.4em] uppercase text-white/25">
             One piece. Every day.
           </p>
+          <Link
+            href="/account"
+            onClick={() => setMenuOpen(false)}
+            className="font-sans text-[9px] tracking-[0.3em] uppercase text-white/35 hover:text-white transition-colors"
+          >
+            Account
+          </Link>
         </div>
       </div>
     </>
