@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useCart } from '@/hooks/useCart'
 import { MischiefButton, SoldOutButton } from '@/components/ui/Buttons'
-import { cn, getVariantByOptions } from '@/utils'
+import { cn, getVariantByOptions, formatMoney } from '@/utils'
 import type { Product, SelectedOptions } from '@/types'
 
 interface OptionSelectorProps {
@@ -120,6 +120,39 @@ export function AddToCartForm({ product }: { product: Product }) {
         >
           Save For Later Trouble
         </button>
+      </div>
+
+      {/* Mobile sticky bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[600] bg-[#111111]/95 backdrop-blur-sm border-t border-white/[0.08] px-5 py-4 flex items-center gap-4">
+        <div className="flex-shrink-0">
+          {selectedVariant?.compareAtPrice && (
+            <p className="font-sans text-[9px] text-white/30 line-through leading-none mb-0.5">
+              {formatMoney(selectedVariant.compareAtPrice)}
+            </p>
+          )}
+          <p className="font-serif text-[18px] font-light text-white leading-none">
+            {selectedVariant ? formatMoney(selectedVariant.price) : '—'}
+          </p>
+        </div>
+        <div className="flex-1">
+          {isSoldOut ? (
+            <SoldOutButton />
+          ) : (
+            <button
+              onClick={handleAdd}
+              disabled={!selectedVariant || isAdding}
+              className={cn(
+                'w-full py-3 font-sans text-[9px] tracking-[0.3em] uppercase transition-all duration-300 focus-visible:outline-2 focus-visible:outline-[#B5121B] focus-visible:outline-offset-2',
+                added
+                  ? 'bg-white/10 text-white/70'
+                  : 'bg-white text-[#111111] hover:bg-white/90',
+                (!selectedVariant || isAdding) && 'opacity-50 cursor-not-allowed'
+              )}
+            >
+              {added ? 'Added ✓' : isAdding ? 'Adding…' : 'Add to Bag'}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )
