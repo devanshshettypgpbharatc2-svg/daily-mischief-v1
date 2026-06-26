@@ -102,7 +102,7 @@ export function Nav() {
 
   const qty = cart?.totalQuantity ?? 0
 
-  const allMobileLinks = [
+  const allMobileLinks: Array<{ label: string; href: string; isTodays?: boolean }> = [
     { label: "Today's Mischief", href: '/shop/collections/todays-mischief', isTodays: true },
     ...NAV_LINKS,
   ]
