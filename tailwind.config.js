@@ -33,10 +33,20 @@ module.exports = {
           '50%': { left: '0%' },
           '100%': { left: '100%' },
         },
+        fadeUp: {
+          from: { opacity: '0', transform: 'translateY(24px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
       },
       animation: {
         marquee: 'marquee 28s linear infinite',
         scrollLine: 'scrollLine 2.4s ease-in-out infinite',
+        'fade-up': 'fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both',
+        'fade-in': 'fadeIn 0.6s ease both',
       },
     },
   },

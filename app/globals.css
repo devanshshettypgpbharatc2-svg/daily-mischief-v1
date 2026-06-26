@@ -21,10 +21,8 @@ body {
   overflow-x: hidden;
 }
 
-/* Cursor — pointer devices only */
-@media (pointer: fine) {
-  * { cursor: none !important; }
-}
+/* Cursor — disabled until custom cursor component is built in Phase 2 */
+/* @media (pointer: fine) { * { cursor: none !important; } } */
 
 /* Focus rings — always visible */
 :focus-visible {

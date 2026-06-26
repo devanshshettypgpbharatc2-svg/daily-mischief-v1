@@ -24,33 +24,4 @@ export async function GET() {
         query: `{ shop { name } collection(handle: "wardrobe") { title products(first: 3) { edges { node { title } } } } }`,
       }),
       cache: 'no-store',
-    })
-    simpleResult = await res.json()
-  } catch (err) {
-    simpleResult = { error: String(err) }
-  }
-
-  // Test 2: the ACTUAL production query with fragments
-  let fragmentResult: unknown = null
-  try {
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        query: GET_COLLECTION_BY_HANDLE,
-        variables: { handle: 'wardrobe', first: 5, sortKey: 'COLLECTION_DEFAULT', reverse: false },
-      }),
-      cache: 'no-store',
-    })
-    fragmentResult = await res.json()
-  } catch (err) {
-    fragmentResult = { error: String(err) }
-  }
-
-  return NextResponse.json({
-    domain,
-    usingPrivateToken: !!privateToken,
-    simpleQuery: simpleResult,
-    fragmentQuery: fragmentResult,
-  })
-}
+    

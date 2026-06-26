@@ -114,12 +114,4 @@ export const SEARCH_PRODUCTS = `
             priceRange {
               minVariantPrice { ...MoneyFragment }
             }
-            images(first: 1) { edges { node { ...ImageFragment } } }
-          }
-        }
-      }
-    }
-  }
-  ${MONEY_FRAGMENT}
-  ${IMAGE_FRAGMENT}
-`
+            images(fi
