@@ -33,14 +33,14 @@ export function transformVariant(v: ShopifyProductVariant): ProductVariant {
     id: v.id,
     title: v.title,
     available: v.availableForSale,
-    quantityAvailable: v.quantityAvailable ?? 0,
+    quantityAvailable: (v as any).quantityAvailable ?? 0,
     options: (v.selectedOptions ?? []).reduce<Record<string, string>>(
       (acc, o) => ({ ...acc, [o.name]: o.value }),
       {}
     ),
     price: transformMoney(v.price),
     compareAtPrice: v.compareAtPrice ? transformMoney(v.compareAtPrice) : null,
-    sku: v.sku,
+    sku: (v as any).sku ?? '',
     image: v.image ? transformImage(v.image) : null,
   }
 }
@@ -58,7 +58,7 @@ export function transformProduct(p: ShopifyProduct): Product {
     vendor: p.vendor,
     images: (p.images?.edges ?? []).map(e => transformImage(e.node)),
     variants: (p.variants?.edges ?? []).map(e => transformVariant(e.node)),
-    options: p.options,
+    options: p.options ?? [],
     priceRange: {
       min: transformMoney(p.priceRange.minVariantPrice),
       max: transformMoney(p.priceRange.maxVariantPrice),

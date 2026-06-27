@@ -1,6 +1,7 @@
 'use client'
 
 import { AccordionItem } from '@/components/ui/Accordion'
+export { isClothingProduct } from '@/utils'
 
 const SIZES = [
   { size: 'XS',  chest: '81–86',  waist: '61–66',  hip: '86–91',  shoulder: '38' },
@@ -11,19 +12,6 @@ const SIZES = [
   { size: '2XL', chest: '106–111',waist: '86–91',  hip: '111–116',shoulder: '48' },
   { size: '3XL', chest: '111–116',waist: '91–96',  hip: '116–121',shoulder: '50' },
 ]
-
-const CLOTHING_TYPES = [
-  'shirt', 'tshirt', 't-shirt', 'top', 'jacket', 'coat', 'hoodie',
-  'sweatshirt', 'sweater', 'dress', 'trouser', 'pant', 'jeans',
-  'shorts', 'skirt', 'kurta', 'kurti', 'clothing', 'apparel',
-  'wardrobe', 'wear',
-]
-
-export function isClothingProduct(type?: string): boolean {
-  if (!type) return false
-  const lower = type.toLowerCase()
-  return CLOTHING_TYPES.some(t => lower.includes(t))
-}
 
 export function SizeChart() {
   return (

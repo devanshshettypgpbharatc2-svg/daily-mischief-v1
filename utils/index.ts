@@ -62,6 +62,19 @@ export function formatCountdown(ms: number): string {
   return [h, m, s].map(n => String(n).padStart(2, '0')).join(':')
 }
 
+const CLOTHING_TYPES = [
+  'shirt', 'tshirt', 't-shirt', 'top', 'jacket', 'coat', 'hoodie',
+  'sweatshirt', 'sweater', 'dress', 'trouser', 'pant', 'jeans',
+  'shorts', 'skirt', 'kurta', 'kurti', 'clothing', 'apparel',
+  'wardrobe', 'wear',
+]
+
+export function isClothingProduct(type?: string): boolean {
+  if (!type) return false
+  const lower = type.toLowerCase()
+  return CLOTHING_TYPES.some(t => lower.includes(t))
+}
+
 export function safeLS<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback
   try {

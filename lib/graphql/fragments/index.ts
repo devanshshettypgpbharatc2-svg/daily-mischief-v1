@@ -20,8 +20,6 @@ export const PRODUCT_VARIANT_FRAGMENT = `
     id
     title
     availableForSale
-    quantityAvailable
-    sku
     selectedOptions { name value }
     price { ...MoneyFragment }
     compareAtPrice { ...MoneyFragment }

@@ -9,10 +9,10 @@ import { AddToCartForm } from '@/components/product/AddToCartForm'
 import { ProductCard } from '@/components/product/ProductCard'
 import { ProductGallery } from '@/components/product/ProductGallery'
 import { AccordionItem } from '@/components/ui/Accordion'
-import { SizeChart, isClothingProduct } from '@/components/product/SizeChart'
+import { SizeChart } from '@/components/product/SizeChart'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { getProductByHandle, getProductRecommendations } from '@/lib/shopify'
-import { formatMoney } from '@/utils'
+import { formatMoney, isClothingProduct } from '@/utils'
 import type { Product } from '@/types'
 
 export const revalidate = 3600
