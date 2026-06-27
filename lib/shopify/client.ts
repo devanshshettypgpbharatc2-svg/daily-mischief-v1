@@ -3,7 +3,7 @@ import type { ShopifyAPIResponse } from '@/types'
 const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN!
 const privateToken = process.env.SHOPIFY_STOREFRONT_PRIVATE_TOKEN
 const publicToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!
-const version = process.env.SHOPIFY_API_VERSION || '2024-10'
+const version = process.env.SHOPIFY_API_VERSION || '2025-07'
 
 if (!domain || (!privateToken && !publicToken)) {
   if (typeof window === 'undefined' && process.env.NODE_ENV !== 'test') {
