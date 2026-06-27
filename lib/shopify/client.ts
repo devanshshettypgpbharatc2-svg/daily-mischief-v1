@@ -64,8 +64,15 @@ export async function shopifyFetch<T>(
   const json: ShopifyAPIResponse<T> = await res.json()
 
   if (json.errors?.length) {
-    throw new Error(
-      `GraphQL: ${json.errors.map((e) => e.message).join(', ')}`
+    if (!json.data) {
+      throw new Error(
+        `GraphQL: ${json.errors.map((e) => e.message).join(', ')}`
+      )
+    }
+    // Partial field errors — log but continue with available data
+    console.warn(
+      '[Shopify] GraphQL partial errors:',
+      json.errors.map((e) => e.message).join(', ')
     )
   }
 
