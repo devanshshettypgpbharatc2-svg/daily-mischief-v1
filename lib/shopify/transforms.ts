@@ -113,11 +113,12 @@ export function transformCartLine(line: ShopifyCartLine): CartItem {
 }
 
 export function transformCart(c: ShopifyCart): Cart {
-  // Shopify uses the custom domain (thedailymischief.store) in checkoutUrl,
-  // but our Next.js app lives there — checkout must go to the myshopify.com domain.
-  const checkoutUrl = c.checkoutUrl
-    .replace('thedailymischief.store', 'a5d5y4-ap.myshopify.com')
-    .replace('www.thedailymischief.store', 'a5d5y4-ap.myshopify.com')
+  // Shopify uses the custom domain in checkoutUrl, but our Next.js app lives there.
+  // Rewrite to myshopify.com so checkout is served by Shopify's servers.
+  const checkoutUrl = c.checkoutUrl.replace(
+    /https?:\/\/(www\.)?thedailymischief\.store/,
+    'https://a5d5y4-ap.myshopify.com'
+  )
 
   return {
     id: c.id,
