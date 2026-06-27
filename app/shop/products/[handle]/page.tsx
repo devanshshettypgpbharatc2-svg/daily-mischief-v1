@@ -235,4 +235,12 @@ export default async function ProductPage({ params }: { params: { handle: string
           </div>
         </div>
 
-      
+        {/* Recommendations */}
+        <Suspense fallback={<div className="h-32" />}>
+          <Recommendations productId={product.id} />
+        </Suspense>
+      </main>
+      <Footer />
+    </>
+  )
+}

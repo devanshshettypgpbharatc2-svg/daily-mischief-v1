@@ -120,4 +120,6 @@ export function transformCart(c: ShopifyCart): Cart {
     items: c.lines.edges.map(e => transformCartLine(e.node)),
     subtotal: transformMoney(c.cost.subtotalAmount),
     total: transformMoney(c.cost.totalAmount),
-    tax: c.cost.totalTaxAmount ? transformMoney(c.cost.tota
+    tax: c.cost.totalTaxAmount ? transformMoney(c.cost.totalTaxAmount) : null,
+  }
+}

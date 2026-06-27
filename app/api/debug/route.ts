@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { GET_COLLECTION_BY_HANDLE } from '@/lib/graphql/queries'
+import { GET_COLLECTION_BY_HANDLE, GET_PRODUCT_BY_HANDLE } from '@/lib/graphql/queries'
 
 export async function GET() {
   const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN
@@ -47,10 +47,8 @@ export async function GET() {
     fragmentResult = { error: String(err) }
   }
 
-  return NextResponse.json({
-    domain,
-    usingPrivateToken: !!privateToken,
-    simpleQuery: simpleResult,
-    fragmentQuery: fragmentResult,
-  })
-}
+  // Test 3: direct product query by handle
+  let productResult: unknown = null
+  try {
+    const res = await fetch(endpoint, {
+     
