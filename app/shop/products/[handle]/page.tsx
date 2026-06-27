@@ -11,16 +11,12 @@ import { ProductGallery } from '@/components/product/ProductGallery'
 import { AccordionItem } from '@/components/ui/Accordion'
 import { SizeChart, isClothingProduct } from '@/components/product/SizeChart'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
-import { getProductByHandle, getAllProductHandles, getProductRecommendations } from '@/lib/shopify'
+import { getProductByHandle, getProductRecommendations } from '@/lib/shopify'
 import { formatMoney } from '@/utils'
 import type { Product } from '@/types'
 
 export const revalidate = 3600
-
-export async function generateStaticParams() {
-  const handles = await getAllProductHandles()
-  return handles.map(handle => ({ handle }))
-}
+export const dynamicParams = true
 
 export async function generateMetadata({ params }: { params: { handle: string } }): Promise<Metadata> {
   const product = await getProductByHandle(params.handle)
